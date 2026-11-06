@@ -1,11 +1,15 @@
-"""画布窗口 —— 把本地 10027 画布装进原生窗口（WebView2），不经过浏览器标签页。"""
+"""画布窗口 —— 把本地 10027 画布装进原生窗口（WebView2），不经过浏览器标签页。
+
+两种运行方式：
+1) 便携包：同目录或 server/ 下有 CanvasServer.exe，直接用它起画布与任务服务（无需 Python）
+2) 源码目录：用 .venv 的 python 起 run.py 与 backend.run_worker
+"""
 from __future__ import annotations
 
 import os
 import socket
 import subprocess
 import sys
-import threading
 import time
 import webbrowser
 from pathlib import Path
@@ -21,20 +25,22 @@ CREATE_NO_WINDOW = 0x08000000
 
 
 def app_root() -> Path:
-    """项目根：优先找含 run.py 的目录（exe 可能放在 dist 子目录里）。"""
+    """项目根：向上找含 run.py 或 CanvasServer.exe 的目录。"""
     if getattr(sys, "frozen", False):
         here = Path(sys.executable).resolve().parent
+        # 便携包：本目录自带 server，就不要往上找源码目录
+        if (here / "CanvasServer.exe").is_file() or (here / "server" / "CanvasServer.exe").is_file():
+            return here
         for depth, cand in enumerate((here, *here.parents)):
             if depth > 3:
                 break
-            if (cand / "run.py").is_file():
+            if (cand / "run.py").is_file() or (cand / "CanvasServer.exe").is_file():
                 return cand
         return here
     return Path(__file__).resolve().parent
 
 
 ROOT = app_root()
-DATA = ROOT / "data"
 LOGS = ROOT / "logs"
 
 SERVICES: list[subprocess.Popen] = []
@@ -69,23 +75,54 @@ def python_exe() -> str | None:
     return None
 
 
+def server_exe() -> Path | None:
+    for cand in (ROOT / "CanvasServer.exe", ROOT / "server" / "CanvasServer.exe"):
+        if cand.is_file():
+            return cand
+    return None
+
+
+def data_dir() -> Path:
+    """数据目录跟着服务走：便携包在 server\data，源码模式在项目根 data。"""
+    exe = server_exe()
+    if exe:
+        return exe.parent / "data"
+    return ROOT / "data"
+
+
 def port_open(port: int, timeout: float = 0.4) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(timeout)
         return s.connect_ex((HOST, port)) == 0
 
 
-def spawn(args: list[str], tag: str) -> subprocess.Popen | None:
-    py = python_exe()
-    if not py:
-        return None
-    LOGS.mkdir(parents=True, exist_ok=True)
-    log = open(LOGS / f"{tag}.log", "ab", buffering=0)
+def build_cmd(role: str):
+    """role: 'canvas' | 'worker'。返回 (命令列表, 环境变量) 或 (None, env)。"""
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONUNBUFFERED"] = "1"
+
+    exe = server_exe()
+    if exe:
+        env["CANVAS_ROLE"] = "worker" if role == "worker" else ""
+        return [str(exe)], env
+
+    py = python_exe()
+    if not py:
+        return None, env
+    cmd = [py, "-m", "backend.run_worker"] if role == "worker" else [py, "run.py"]
+    return cmd, env
+
+
+def spawn(role: str) -> subprocess.Popen | None:
+    cmd, env = build_cmd(role)
+    if not cmd:
+        return None
+    LOGS.mkdir(parents=True, exist_ok=True)
+    log = open(LOGS / f"{role}.log", "ab", buffering=0)
+    cwd = str(server_exe().parent) if server_exe() else str(ROOT)
     return subprocess.Popen(
-        [py, *args], cwd=str(ROOT), stdout=log, stderr=subprocess.STDOUT,
+        cmd, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
         creationflags=CREATE_NO_WINDOW, env=env,
     )
 
@@ -93,18 +130,18 @@ def spawn(args: list[str], tag: str) -> subprocess.Popen | None:
 def start_services() -> None:
     global OWNED
     if not port_open(WORKER_PORT):
-        p = spawn(["-m", "backend.run_worker"], "worker")
+        p = spawn("worker")
         if p:
             SERVICES.append(p)
-        time.sleep(1.0)
+        time.sleep(1.2)
     if not port_open(PORT):
-        p = spawn(["run.py"], "canvas")
+        p = spawn("canvas")
         if p:
             SERVICES.append(p)
     OWNED = bool(SERVICES)
 
 
-def wait_ready(seconds: float = 90.0) -> bool:
+def wait_ready(seconds: float = 120.0) -> bool:
     end = time.time() + seconds
     while time.time() < end:
         if port_open(PORT):
@@ -133,7 +170,10 @@ def stop_services() -> None:
 
 
 def open_data_dir(_=None) -> None:
-    os.startfile(str(DATA))
+    target = data_dir()
+    if not target.is_dir():
+        target = ROOT
+    os.startfile(str(target))
 
 
 def open_browser(_=None) -> None:
@@ -155,21 +195,20 @@ def quit_app(_=None) -> None:
 
 
 def boot() -> None:
-    if wait_ready(120) and WINDOW:
+    if wait_ready() and WINDOW:
         WINDOW.load_url(f"http://{HOST}:{PORT}/")
     elif WINDOW:
         WINDOW.load_html(
             "<html><body style='background:#0e1014;color:#e6e8ee;font-family:Microsoft YaHei UI;"
             "display:flex;align-items:center;justify-content:center;height:100vh;margin:0'>"
             "<div style='text-align:center'><div style='font-size:20px'>启动失败</div>"
-            "<div style='font-size:13px;color:#8b93a7;margin-top:12px'>请双击 start.bat 查看错误信息，"
-            "或检查 logs 目录</div></div></body></html>"
+            "<div style='font-size:13px;color:#8b93a7;margin-top:12px'>请查看 logs 目录，"
+            "或确认 CanvasServer.exe 与本程序在同一目录 / server 子目录</div></div></body></html>"
         )
 
 
 def main() -> None:
     global WINDOW
-    DATA.mkdir(parents=True, exist_ok=True)
     LOGS.mkdir(parents=True, exist_ok=True)
     start_services()
 
@@ -196,7 +235,7 @@ def main() -> None:
         boot,
         menu=[menu],
         private_mode=False,
-        storage_path=str(DATA / "webview"),
+        storage_path=str(data_dir() / "webview"),
         icon=str(icon) if icon.is_file() else None,
     )
     if OWNED:
