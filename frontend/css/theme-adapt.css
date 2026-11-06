@@ -626,8 +626,8 @@ html[data-theme="white"] .connections .conn-path {
 }
 
 /* —— White theme: force remaining low-contrast leftovers —— */
-html[data-theme="white"] .workspace-qingzi-badge,
-html[data-theme-mode="light"] .workspace-qingzi-badge {
+html[data-theme="white"] .workspace-kaka-badge,
+html[data-theme-mode="light"] .workspace-kaka-badge {
   color: #ffffff !important;
   background: #111116 !important;
   border-color: rgba(0, 0, 0, 0.2) !important;

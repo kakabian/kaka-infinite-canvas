@@ -10,7 +10,7 @@ if (-not (Test-Path $venv)) {
 $py = Join-Path $venv "Scripts\python.exe"
 & $py -m pip install -q pyinstaller httpx
 
-$dist = Join-Path $Root "dist\QingZiUpscale"
+$dist = Join-Path $Root "dist\KaKaUpscale"
 $workerDir = Join-Path $Root "upscale-worker"
 
 & $py -m PyInstaller `
@@ -18,7 +18,7 @@ $workerDir = Join-Path $Root "upscale-worker"
     --clean `
     UpscaleWorker.spec
 
-$target = Join-Path $dist "QingZiUpscale.exe"
+$target = Join-Path $dist "KaKaUpscale.exe"
 if (-not (Test-Path $target)) {
     Write-Error "Build failed: $target not found"
 }
@@ -27,5 +27,5 @@ Copy-Item -Force "$workerDir\start.vbs" "$dist\start.vbs"
 Write-Host ""
 Write-Host "Built: $target"
 Write-Host "Folder: $dist"
-Write-Host "1) Copy tools\engines\realesrgan-ncnn-vulkan into dist\QingZiUpscale\"
-Write-Host "2) Run QingZiUpscale.exe, paste admin link, set threads, Start"
+Write-Host "1) Copy tools\engines\realesrgan-ncnn-vulkan into dist\KaKaUpscale\"
+Write-Host "2) Run KaKaUpscale.exe, paste admin link, set threads, Start"

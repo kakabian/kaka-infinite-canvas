@@ -1,11 +1,11 @@
 /**
  * Global UI themes: default | black | white | pink | custom
- * Persisted in qingzi_canvas_prefs.theme (+ themeCustom).
+ * Persisted in kaka_canvas_prefs.theme (+ themeCustom).
  */
 (function (global) {
   "use strict";
 
-  const PREFS_KEY = "qingzi_canvas_prefs";
+  const PREFS_KEY = "kaka_canvas_prefs";
   const LEGACY_PREFS_KEY = "doubao_canvas_prefs";
   const THEME_IDS = ["default", "black", "white", "pink", "custom"];
   const CUSTOM_VARS = [

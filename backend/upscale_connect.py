@@ -43,7 +43,7 @@ def build_link(*, server_url: str, token: str, username: str = "") -> str:
     if username:
         params["u"] = username
     q = urllib.parse.urlencode(params)
-    return f"qingzi-upscale://connect?{q}"
+    return f"kaka-upscale://connect?{q}"
 
 
 def build_link_for_user(user_id: str, server_url: str) -> str:
@@ -62,7 +62,7 @@ def parse_link(raw: str) -> dict[str, str]:
     text = (raw or "").strip()
     if not text:
         raise ValueError("连接链接为空")
-    if text.startswith("qingzi-upscale://") or text.startswith("doubao-upscale://"):
+    if text.startswith("kaka-upscale://") or text.startswith("doubao-upscale://"):
         parsed = urllib.parse.urlparse(text)
         q = urllib.parse.parse_qs(parsed.query, keep_blank_values=False)
         server = (q.get("s") or q.get("server") or [""])[0]

@@ -8,7 +8,7 @@ if exist port.txt (
 )
 
 echo.
-echo  Starting QingZi canvas...
+echo  Starting KaKa canvas...
 echo  Port: %PORT%  (edit port.txt to change)
 echo.
 

@@ -3,7 +3,7 @@ cd /d "%~dp0"
 title Canvas 10027
 
 REM If LAN firewall rule is missing, try one UAC elevation (non-fatal if cancelled).
-netsh advfirewall firewall show rule name="QingZi Canvas 10027" >nul 2>&1
+netsh advfirewall firewall show rule name="KaKa Canvas 10027" >nul 2>&1
 if errorlevel 1 (
   echo [LAN] Firewall rule missing - requesting Administrator once...
   echo [LAN] If UAC appears, click Yes. Cancel is OK - server still starts for this PC.

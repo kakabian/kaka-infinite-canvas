@@ -31,9 +31,10 @@
     <script>
     (function () {
       try {
-        var raw = localStorage.getItem("qingzi_canvas_prefs") || localStorage.getItem("doubao_canvas_prefs") || "{}";
-        if (localStorage.getItem("doubao_canvas_prefs") && !localStorage.getItem("qingzi_canvas_prefs")) {
-          localStorage.setItem("qingzi_canvas_prefs", raw);
+        var raw = localStorage.getItem("kaka_canvas_prefs") || localStorage.getItem("qingzi_canvas_prefs") || localStorage.getItem("doubao_canvas_prefs") || "{}";
+        if (!localStorage.getItem("kaka_canvas_prefs")) {
+          localStorage.setItem("kaka_canvas_prefs", raw);
+          localStorage.removeItem("qingzi_canvas_prefs");
           localStorage.removeItem("doubao_canvas_prefs");
         }
         var d = JSON.parse(raw);
@@ -97,7 +98,7 @@
       <header class="workspace-home-head">
         <div class="workspace-home-brand">
           <h1>
-            <span class="workspace-qingzi-badge" title="无限画布" aria-hidden="true">Ka</span>
+            <span class="workspace-kaka-badge" title="无限画布" aria-hidden="true">Ka</span>
             <span class="workspace-home-title">主页</span>
           </h1>
           <p>选择画板进入 · 右键可重命名、导出或删除</p>

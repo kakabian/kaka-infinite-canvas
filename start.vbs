@@ -1,4 +1,4 @@
-' QingZi Canvas — silent start (no CMD window)
+' KaKa Canvas — silent start (no CMD window)
 Set fso = CreateObject("Scripting.FileSystemObject")
 Set shell = CreateObject("WScript.Shell")
 dir = fso.GetParentFolderName(WScript.ScriptFullName)

@@ -32,9 +32,10 @@
     <script>
     (function () {
       try {
-        var raw = localStorage.getItem("qingzi_canvas_prefs") || localStorage.getItem("doubao_canvas_prefs") || "{}";
-        if (localStorage.getItem("doubao_canvas_prefs") && !localStorage.getItem("qingzi_canvas_prefs")) {
-          localStorage.setItem("qingzi_canvas_prefs", raw);
+        var raw = localStorage.getItem("kaka_canvas_prefs") || localStorage.getItem("qingzi_canvas_prefs") || localStorage.getItem("doubao_canvas_prefs") || "{}";
+        if (!localStorage.getItem("kaka_canvas_prefs")) {
+          localStorage.setItem("kaka_canvas_prefs", raw);
+          localStorage.removeItem("qingzi_canvas_prefs");
           localStorage.removeItem("doubao_canvas_prefs");
         }
         var d = JSON.parse(raw);

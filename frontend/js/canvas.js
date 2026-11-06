@@ -11758,11 +11758,12 @@ const CanvasPrefs = {
 
   load() {
     try {
-      let raw = localStorage.getItem("qingzi_canvas_prefs");
+      let raw = localStorage.getItem("kaka_canvas_prefs");
       if (!raw) {
-        raw = localStorage.getItem("doubao_canvas_prefs");
+        raw = localStorage.getItem("qingzi_canvas_prefs") || localStorage.getItem("doubao_canvas_prefs");
         if (raw) {
-          localStorage.setItem("qingzi_canvas_prefs", raw);
+          localStorage.setItem("kaka_canvas_prefs", raw);
+          localStorage.removeItem("qingzi_canvas_prefs");
           localStorage.removeItem("doubao_canvas_prefs");
         }
       }
@@ -11819,7 +11820,7 @@ const CanvasPrefs = {
       /* ignore */
     }
     localStorage.setItem(
-      "qingzi_canvas_prefs",
+      "kaka_canvas_prefs",
       JSON.stringify({
         keys: this.keys,
         sensitivity: this.sensitivity,
@@ -25069,9 +25070,9 @@ function sanitizeNodeForClipboard(node, opts = {}) {
   return copy;
 }
 
-const CANVAS_NODES_CLIP_FORMAT = "qingzi-canvas-nodes";
+const CANVAS_NODES_CLIP_FORMAT = "kaka-canvas-nodes";
 const CANVAS_NODES_CLIP_VERSION = 1;
-const CANVAS_NODES_CLIP_LS_KEY = "qingzi-canvas-nodes-clipboard";
+const CANVAS_NODES_CLIP_LS_KEY = "kaka-canvas-nodes-clipboard";
 
 function buildCanvasNodesClipboardPayload(nodes, connections) {
   return {

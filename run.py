@@ -1,4 +1,4 @@
-"""Entry point: python run.py  /  QingZiCanvas.exe"""
+"""Entry point: python run.py  /  KaKaCanvas.exe"""
 from __future__ import annotations
 
 import os

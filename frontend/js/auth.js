@@ -1693,12 +1693,12 @@
       }
       // Fallback when canvas engine isn't on this page yet.
       try {
-        let raw = localStorage.getItem("qingzi_canvas_prefs");
+        let raw = localStorage.getItem("kaka_canvas_prefs");
         if (!raw) raw = localStorage.getItem("doubao_canvas_prefs");
         const data = raw ? JSON.parse(raw) : {};
         const next = data.connFlowAnim === false;
         data.connFlowAnim = next;
-        localStorage.setItem("qingzi_canvas_prefs", JSON.stringify(data));
+        localStorage.setItem("kaka_canvas_prefs", JSON.stringify(data));
         try {
           localStorage.removeItem("doubao_canvas_prefs");
         } catch {}

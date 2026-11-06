@@ -47,7 +47,7 @@ def download_export(token: str, background_tasks: BackgroundTasks):
 @router.post("/import-preview")
 async def import_preview(files: list[UploadFile] = File(...)):
     user = require_login_user()
-    temp = tempfile.TemporaryDirectory(prefix="qingzi-import-")
+    temp = tempfile.TemporaryDirectory(prefix="kaka-import-")
     try:
         if not 1 <= len(files) <= packages.MAX_PACKAGES:
             raise ValueError("每批请选择 1–20 个分享压缩包")

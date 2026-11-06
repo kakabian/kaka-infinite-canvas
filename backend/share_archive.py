@@ -26,7 +26,7 @@ from backend import board_assets, canvas_store
 from backend.json_io import load_json, save_json
 from backend.user_scope import user_data_root
 
-FORMAT = "qingzi-workspace"
+FORMAT = "kaka-workspace"
 VERSION = 1
 MAX_ARCHIVE_BYTES = 8 * 1024**3
 MAX_BATCH_BYTES = 16 * 1024**3
@@ -51,7 +51,7 @@ PRIVATE_KEYS = frozenset({
 SECRET_KEYS = frozenset({"api_key", "apikey", "authorization", "cookie", "set-cookie",
                          "password", "secret", "access_token", "refresh_token", "x-api-key"})
 _LOCAL_REF = re.compile(r'(?:https?://[^\s"\'<>]+)?/uploads/[^\s"\'<>]+')
-_PACKAGE_REF = re.compile(r"qingzi-asset:assets/[A-Za-z0-9_-]+\.[a-z0-9]{1,10}")
+_PACKAGE_REF = re.compile(r"(?:kaka|qingzi)-asset:assets/[A-Za-z0-9_-]+\.[a-z0-9]{1,10}")
 _staged: dict[str, dict[str, Any]] = {}
 _exports: dict[str, dict[str, Any]] = {}
 _stage_lock = threading.Lock()
@@ -220,10 +220,10 @@ def export_archive(user_id: str, kind: str, doc_id: str) -> tuple[Path, tempfile
     plan = export_plan(user_id, kind, doc_id)
     if plan["summary"]["missing_files"]:
         raise ValueError("有素材文件丢失，请先恢复素材后再分享")
-    temp = tempfile.TemporaryDirectory(prefix="qingzi-share-")
+    temp = tempfile.TemporaryDirectory(prefix="kaka-share-")
     try:
         archive_path = Path(temp.name) / "project.zip"
-        mapping = {src: f"qingzi-asset:{a['name']}" for src, a in plan["assets"].items()}
+        mapping = {src: f"kaka-asset:{a['name']}" for src, a in plan["assets"].items()}
         doc = _rewrite(plan["document"], mapping)
         document_bytes = _json_bytes(doc)
         metadata_budget = len(document_bytes) + len({a["name"] for a in plan["assets"].values()}) * 250 + 2048
@@ -398,6 +398,7 @@ def import_preview(user_id: str, token: str) -> dict:
                             digest.update(chunk)
                     if digest.hexdigest() != entry["sha256"]:
                         raise ValueError(f"素材校验失败：{filename}")
+                    mapping[f"kaka-asset:{entry['path']}"] = media.public_url(user_id, doc_id, filename)
                     mapping[f"qingzi-asset:{entry['path']}"] = media.public_url(user_id, doc_id, filename)
             doc = _rewrite(doc, mapping)
             def relocate(value):
