@@ -1,5 +1,18 @@
 # 无限画布
 
+<p align="center">
+  <a href="https://github.com/kakabian/kaka-infinite-canvas/stargazers"><img src="https://img.shields.io/github/stars/kakabian/kaka-infinite-canvas?style=flat-square&logo=github&label=stars&color=black" alt="stars"></a>
+  <img src="https://img.shields.io/badge/version-v1.0.1-blue?style=flat-square" alt="version">
+  <img src="https://img.shields.io/badge/license-%E9%9D%9E%E5%95%86%E7%94%A8-orange?style=flat-square" alt="license">
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square" alt="platform">
+  <img src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="python">
+  <img src="https://img.shields.io/badge/FastAPI-0.110%2B-009688?style=flat-square&logo=fastapi&logoColor=white" alt="fastapi">
+</p>
+
+<p align="center">
+  <a href="https://github.com/kakabian/kaka-infinite-canvas/releases/download/v1.0.1/kaka-canvas-portable-v1.0.1.zip"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-Windows%20%E5%85%8D%E5%AE%89%E8%A3%85%E4%BE%BF%E6%90%BA%E7%89%88%2078MB-2ea44f?style=flat-square&logo=windows&logoColor=white" alt="download"></a>
+</p>
+
 我是一个漫剧爱好者。自己做漫剧时，总要把文案、分镜图、视频和配音串在一张画布上，现成工具要么太重，要么不适合一个人在家里用。所以我写了这个小工具，功能就这么简单，够自己用就行。
 
 现在把源码公开出来，希望大家合理使用：自己学习、自己做漫剧都可以。不要拿去卖、不要拿去收费、不要拿去商用。完整约定在 [LICENSE](LICENSE) 和 [DISCLAIMER.md](DISCLAIMER.md)。软件按现状提供，不保证一直好用。
