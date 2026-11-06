@@ -1,4 +1,8 @@
-# 无限画布
+<p align="center">
+  <img src="assets/logo-256.png" width="132" alt="KaKa" />
+</p>
+
+<h1 align="center">无限画布</h1>
 
 <p align="center">
   <a href="https://github.com/kakabian/kaka-infinite-canvas/stargazers"><img src="https://img.shields.io/github/stars/kakabian/kaka-infinite-canvas?style=flat-square&logo=github&label=stars&color=black" alt="stars"></a>
