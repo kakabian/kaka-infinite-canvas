@@ -17,73 +17,85 @@
   <a href="https://github.com/kakabian/kaka-infinite-canvas/releases/download/v1.0.1/kaka-canvas-portable-v1.0.1.zip"><img src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-Windows%20%E5%85%8D%E5%AE%89%E8%A3%85%E4%BE%BF%E6%90%BA%E7%89%88%2078MB-2ea44f?style=flat-square&logo=windows&logoColor=white" alt="download"></a>
 </p>
 
-我是一个漫剧爱好者。自己做漫剧时，总要把文案、分镜图、视频和配音串在一张画布上，现成工具要么太重，要么不适合一个人在家里用。所以我写了这个小工具，功能就这么简单，够自己用就行。
+## 这是什么
 
-现在把源码公开出来，希望大家合理使用：自己学习、自己做漫剧都可以。不要拿去卖、不要拿去收费、不要拿去商用。完整约定在 [LICENSE](LICENSE) 和 [DISCLAIMER.md](DISCLAIMER.md)。软件按现状提供，不保证一直好用。
+一块能随便拖动的画布，上面放的是你的创作素材：提示词、分镜图、生成的视频、配音片段。节点就是素材，连线就是流程——摆好、接上，点一次就跑一整条。
 
-画布本身不内置模型账号。图、视频、文本、语音都走你自己填的 MyApi 或公共模型接口。密钥和画板只存在本机 `data/`，这个目录不会进仓库。
+做漫剧最耗时间的从来不是写提示词，是素材散在十几个文件夹和浏览器标签里，改一个镜头要来回翻。这里的思路很简单：把「素材」和「模型」摊到同一个平面上，看得见、改得动、跑得通。
+
+整套程序跑在你自己的电脑上。模型账号是你自己的，这个软件不卖额度、不代收请求、不碰你的 Key。
 
 ![无限画布界面](screenshot.png)
 
-## 能做什么
+## 它能干什么
 
-- 在一张画布上放文本、图片、视频、音频，连线后一起生成
-- 设置里填 MyApi 渠道（图片、视频、文本、语音、视觉、智能体），也可以填火山引擎 Key
-- 视频超分：引擎是 [Real-ESRGAN ncnn Vulkan](https://github.com/xinntao/Real-ESRGAN)（BSD 许可证），第一次用时再下载，大约 45MB
+- **四类节点同台**：文本、图片、视频、音频放在同一张画布上，连线之后下游一起生成
+- **多路渠道**：设置里可以分别配图片、视频、文本、语音、视觉、智能体的 MyApi 地址，也能直接填火山引擎 Key
+- **画布即工程**：画板、素材、渠道配置全在本机 `data/`，整个目录拷走就是迁移
+- **视频超分**：内置 [Real-ESRGAN ncnn Vulkan](https://github.com/xinntao/Real-ESRGAN)（BSD 许可），第一次用到时自动下载，约 45 MB
+- **双进程分工**：10027 只负责界面，8089 专门排队跑生成任务，出图的时候界面不卡
+- **可选原生窗口**：不想开浏览器就双击 `画布窗口.exe`，用起来和普通桌面软件没区别
 
-## 你需要准备什么
+## 两种用法
 
-- 一台能上网的电脑（Windows 最省事，macOS / Linux 也可以）
-- [Python 3.10 或更高](https://www.python.org/downloads/)，安装时勾选 “Add python.exe to PATH”
-- 一个你自己的模型接口和 Key（中转站或火山引擎都行，本项目不提供账号）
-- 浏览器，推荐 Chrome 或 Edge
+**一、免安装便携版（推荐）**
 
-## 三分钟跑起来
+到 [Releases](https://github.com/kakabian/kaka-infinite-canvas/releases) 下载 `kaka-canvas-portable-v1.0.1.zip`，解压，双击 `画布窗口.exe`。不用装 Python，整个文件夹拷到另一台 Windows 上照样能用。
 
-先下载源码：点击仓库页面绿色的 **Code → Download ZIP**，解压后进入项目文件夹。安装了 Git 也可以执行：
+**二、跑源码**
 
 ```bash
-git clone https://github.com/drkk5282-gif/Infinite-Canvas-Open-Source-Project.git
-cd Infinite-Canvas-Open-Source-Project
+git clone https://github.com/kakabian/kaka-infinite-canvas.git
+cd kaka-infinite-canvas
 ```
 
-Windows 双击 `start.bat`。它会装依赖，并同时打开画布（端口 10027）和任务服务（端口 8089）。两个黑窗口都留着，关掉就停了。
+Windows 直接双击 `start.bat`：它会自己装依赖，然后同时拉起画布（10027）和任务服务（8089）。两个黑窗口都别关，关掉就停了。浏览器打开 http://127.0.0.1:10027。
 
-浏览器打开：http://127.0.0.1:10027
-
-自己用命令行的话：
+习惯命令行的，两个终端分开跑：
 
 ```bash
 pip install -r requirements.txt
 python -m backend.run_worker
 ```
 
-另开一个终端：
-
 ```bash
 python run.py
 ```
 
-更细的点法写在 [使用教程](docs/使用教程.md)。想把这份源码传到 GitHub 或 Gitee，看 [开源上传教程](docs/开源上传教程.md)。
+更细的玩法写在 [使用教程](docs/使用教程.md)；想把这份代码传到自己的 GitHub 或 Gitee，看 [开源上传教程](docs/开源上传教程.md)。
 
-## 请不要提交这些东西
+## 需要准备什么
 
-- `data/`：画板、上传的素材、你填的 API Key
-- `.venv/`：本机装的 Python 包
-- `.env`：如果以后你自己加了环境变量
-- `*.zip`：旧压缩包和打包产物，避免把旧配置一起传上来
+- Windows 10 / 11 最省事，macOS、Linux 也能跑（用命令行启动）
+- [Python 3.10 以上](https://www.python.org/downloads/)，安装时记得勾 “Add python.exe to PATH”（只有源码模式需要）
+- 一个你自己的模型接口地址和 Key：中转站、官方 API、火山引擎都行，本项目不带账号也不送额度
+- 浏览器用 Chrome 或 Edge（源码模式）
 
-仓库里的 `.gitignore` 已经排除了它们。发出去之前再看一眼，确认压缩包和提交里没有密钥。
+## 提交前别带上这些
 
-## 打包给自己用
+- `data/` —— 画板、素材、你填的 Key
+- `.venv/` —— 本机装的 Python 依赖
+- `.env` —— 你自己加的环境变量
+- `*.zip` —— 打包产物，容易把旧配置一起带上去
+
+`.gitignore` 里已经排掉了，但发之前还是扫一眼，确认压缩包里没有密钥。
+
+## 自己打包
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_release.ps1
 ```
 
-产物在 `dist\CanvasServer-py\`，另外会有 `CanvasServer-py-portable.zip`。对方电脑也要先装 Python 3.10+，解压后双击启动脚本，第一次会自己建 `.venv` 并装依赖。
+产物在 `dist\` 下。要给别人用又不想让他装 Python，就用 `scripts\build_release_server.ps1` 打成自带运行时的版本，再按 `dist\kaka-canvas-portable\` 的结构组装成绿色包。
 
-## 它是怎么跑的
+## 它是怎么跑起来的
 
-1. 画布页面负责界面、画板和 MyApi 配置
-2. 8089 上的任务服务负责真正去请求模型接口
+1. `frontend\` 是纯静态页面：HTML + CSS + 原生 JS，没有构建步骤，改完刷新就生效
+2. `backend\` 是 FastAPI 服务，管画板数据、素材文件、渠道配置和登录
+3. 10027 端口：界面和接口
+4. 8089 端口：任务执行，真正去请求模型的那一端
+5. `data\` 存画板、素材和密钥，`logs\` 存运行日志，两个都不进仓库
+
+## 使用范围
+
+个人学习、自己做片子、改着玩都没问题。转卖、收费、商用不行。完整约定见 [LICENSE](LICENSE) 与 [DISCLAIMER.md](DISCLAIMER.md)。软件按现状提供，不保证一直好用。

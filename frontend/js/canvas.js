@@ -89,8 +89,8 @@ const AUDIO_APP_MODES = [
 const DEFAULT_AUDIO_APP_MODE = "tts";
 const AUDIO_RECORD_MAX_MS = 60_000;
 const WINDOW_TITLE_HOME =
-  "QingZi - 无限画布 | 漫剧制作 | AI图像创作 | AI视频生成 | 智能创意平台";
-const WINDOW_TITLE_CANVAS = "无限画布 · QingZi";
+  "KaKa - 无限画布 | 漫剧制作 | AI图像创作 | AI视频生成 | 智能创意平台";
+const WINDOW_TITLE_CANVAS = "无限画布 · KaKa";
 /** Import/drag-drop video extensions from any provider (non-native types are auto-transcoded server-side). */
 const IMPORT_VIDEO_FILE_RE =
   /\.(mp4|m4v|webm|mov|avi|mkv|f4v|flv|wmv|mpeg|mpg|3gp|3g2|ts|m2ts|mts|ogv|mxf|asf|rm|rmvb|vob|ogm|divx)$/i;
@@ -102,7 +102,7 @@ const _pendingImportPreviews = new Map();
 
 function updateWindowTitle(mode, name) {
   if (mode === "workbench") {
-    document.title = name ? `${name} · 工作台` : "工作台 · QingZi";
+    document.title = name ? `${name} · 工作台` : "工作台 · KaKa";
     return;
   }
   document.title = mode === "canvas" ? WINDOW_TITLE_CANVAS : WINDOW_TITLE_HOME;
